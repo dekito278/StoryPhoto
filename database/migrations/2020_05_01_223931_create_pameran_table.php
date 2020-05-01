@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostImagesTable extends Migration
+class CreatePameranTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreatePostImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_images', function (Blueprint $table) {
-            $table->id();
+        Schema::create('pameran', function (Blueprint $table) {
+            $table->bigIncrements('no');
+            $table->integer('no_pengguna')->unsigned();
+            $table->string('judul');
+            $table->text('deskripsi');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreatePostImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_images');
+        Schema::dropIfExists('pameran');
     }
 }
