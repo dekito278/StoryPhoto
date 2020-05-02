@@ -19,7 +19,27 @@ class PameranController extends Controller
         $user = auth::user();
         $judul = $request->judul;
         $deskripsi = $request->deskripsi;
-        $foto = $request->foto;
+        $fotos = $request->fotos;
+
+        $pamerans = Post::create([
+            'judul' => $judul,
+            'deskripsi' => $deskripsi,
+            'no_pengguna' => $user->no,
+        ]);
+
+        //penempatan foto pameran
+
+        foreach($fotos as $foto) 
+        {
+            $lokasiFoto = Storage::disk('uploads')->put($user->email . '/karya' . $pamerans->no, $foto);
+            PameranFoto::create([
+                'deksripsi_foto' => $judul,
+                'tempat_foto' => '/uploads/' . $lokasiFoto,
+                'no_pameran' => $pamerans->no
+            ]);
+        }
+
+        return response()->json(['error'=>false,'data'=>'$pamerans']);
 
     }
 
