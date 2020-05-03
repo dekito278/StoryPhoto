@@ -1,7 +1,7 @@
 <template>
   <div class="card mt-4" :key="componentKey">
     <div class="card-header">Buat Pameran</div>
-    <div class="card-body">
+    <div class="card-deskripsi">
       <div
         v-if="status_msg"
         :class="{ 'alert-success': status, 'alert-danger': !status }"
@@ -10,19 +10,19 @@
       >{{ status_msg }}</div>
       <form>
         <div class="form-group">
-          <label for="exampleFormControlInput1">Title</label>
+          <label for="exampleFormControlInput1">Nama pameran</label>
           <input
-            v-model="title"
+            v-model="judul"
             type="text"
             class="form-control"
-            id="title"
-            placeholder="Post Title"
+            id="judul"
+            placeholder="kasih keterangan judul pameran ini.."
             required
           />
         </div>
         <div class="form-group">
-          <label for="exampleFormControlTextarea1">Post Content</label>
-          <textarea v-model="body" class="form-control" id="post-content" rows="3" required></textarea>
+          <label for="exampleFormControlTextarea1">Deskripsi pameran</label>
+          <textarea v-model="deskripsi" class="form-control" id="post-content" placeholder="kasih deskripsi pameran ini.." rows="3" required></textarea>
         </div>
         <div class>
           <el-upload
@@ -90,15 +90,15 @@ export default {
       status_msg: "",
       status: "",
       isCreatingPost: false,
-      title: "",
-      body: "",
+      judul: "",
+      deskripsi: "",
       componentKey: 0
     };
   },
   computed: {},
   mounted() {},
   methods: {
-    ...mapActions(["getAllPosts"]),
+    ...mapActions(["AmbilDataPameran"]),
     updateImageList(file) {
       this.imageList.push(file.raw);
     },
@@ -115,8 +115,8 @@ export default {
       const that = this;
       this.isCreatingPost = true;
       let formData = new FormData();
-      formData.append("title", this.title);
-      formData.append("body", this.body);
+      formData.append("judul", this.judul);
+      formData.append("deskripsi", this.deskripsi);
       $.each(this.imageList, function(key, image) {
         formData.append(`images[${key}]`, image);
       });
@@ -125,7 +125,7 @@ export default {
           headers: { "Content-Type": "multipart/form-data" }
         })
         .then(res => {
-          this.title = this.body = "";
+          this.judul = this.deskripsi = "";
           this.status = true;
           this.showNotification("Post Successfully Created");
           this.isCreatingPost = false;
@@ -141,14 +141,14 @@ export default {
     },
     validateForm() {
       //no vaildation for images - it is needed
-      if (!this.title) {
+      if (!this.judul) {
         this.status = false;
-        this.showNotification("Post title cannot be empty");
+        this.showNotification("Post judul cannot be empty");
         return false;
       }
-      if (!this.body) {
+      if (!this.deskripsi) {
         this.status = false;
-        this.showNotification("Post body cannot be empty");
+        this.showNotification("Post deskripsi cannot be empty");
         return false;
       }
       return true;
